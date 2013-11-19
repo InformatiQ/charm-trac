@@ -15,11 +15,6 @@
       tags:
         - install
 
-    - name: init trac env
-      command: trac-admin /var/local/{{ projectname }} initenv {{projectname}} sqlite:db/{{ projectname }}.db creates=/var/local/{{ projectname }}/conf/trac.ini
-      tags:
-        - config-changed
-
     - name: create admin user
       htpasswd: path=/var/local/{{ projectname }}/.htpasswd name={{ tracadmin_user }} password={{ tracadmin_pass }} owner=root group=www-data mode=0640
       tags:
@@ -60,7 +55,12 @@
       tags:
         - stop
 
-    - name: configure database relation
+    - name: init trac env
+      command: trac-admin /var/local/{{ projectname }} initenv {{projectname}} mysql://{{ database__user }}:{{ database__password }}@{{ database__private_address }}:3306/{{ database__database }} creates=/var/local/{{ projectname }}/conf/trac.ini
+      tags:
+        - config-changed
+
+   - name: configure database relation
       ini_file: dest=/var/local/{{ projectname }}/conf/trac.ini section=trac option=database value='mysql://{{ database__user }}:{{ database__password }}@{{ database__private_address }}:3306/{{ database__database }}'
       tags:
         - db-relation-changed
