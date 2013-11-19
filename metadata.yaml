@@ -1,0 +1,11 @@
+name: trac
+summary: trac wiki
+maintainer: rhanna <rhanna@juju>
+description: |
+  trac wiki charm
+categories:
+  - applications
+subordinate: false
+provides:
+  website:
+    interface: http

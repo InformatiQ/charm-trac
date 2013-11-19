@@ -1,0 +1,10 @@
+options:
+  tracadmin_user:
+    type: string
+    default: "Admin"
+    description: "The Admin user for trac"
+  tracadmin_pass:
+    type: string
+    default: "tracAdmin"
+    description: "The Admin user password for trac"
+
