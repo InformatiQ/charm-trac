@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-    
+
 import sys
 import charmhelpers.contrib.ansible
 
@@ -8,8 +8,7 @@ import charmhelpers.contrib.ansible
 # tagged with the hook name.
 hooks = charmhelpers.contrib.ansible.AnsibleHooks(
     playbook_path='playbooks/sites.yml',
-    default_hooks=['start', 'stop', 'config-changed',
-                   'solr-relation-changed'])
+    default_hooks=[])
 
 @hooks.hook()
 def install():
