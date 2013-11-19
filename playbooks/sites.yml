@@ -1,7 +1,7 @@
 - hosts: all
   tasks:
     - name: install needed packages
-      apt: pkg={{ item }} state=lates update_cache=yes
+      apt: pkg={{ item }} state=latest update_cache=yes
       with_items:
         - trac
         - libapache2-mod-python
