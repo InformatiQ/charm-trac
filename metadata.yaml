@@ -1,6 +1,6 @@
 name: trac
 summary: trac wiki
-maintainer: rhanna <rhanna@juju>
+maintainer: rhanna <rhanna@informatiq.org>
 description: |
   trac wiki charm
 categories:
@@ -9,3 +9,7 @@ subordinate: false
 provides:
   website:
     interface: http
+requires:
+  database:
+    interface: mysql
+    optional: true

@@ -5,7 +5,68 @@
       with_items:
         - trac
         - libapache2-mod-python
+        - python-passlib
       tags:
         - install 
         - upgrade-charm
 
+    - name: create trac dir
+      file: path=/var/local/{{ projectname }} owner=www-data group=www-data mode=0644 state=directory
+      tags:
+        - install
+
+    - name: init trac env
+      command: trac-admin /var/local/{{ projectname }} initenv {{projectname}} sqlite:db/{{ projectname }}.db creates=/var/local/{{ projectname }}/conf/trac.ini
+      tags:
+        - config-changed
+
+    - name: create admin user
+      htpasswd: path=/var/local/{{ projectname }}/.htpasswd name={{ tracadmin_user }} password={{ tracadmin_pass }} owner=root group=www-data mode=0640
+      tags:
+        - config-changed
+
+    - name: set admin permissions
+      command: trac-admin /var/local/{{ projectname }} permission add {{ tracadmin_user }} TRAC_ADMIN
+      tags:
+        - config-changed
+
+    - name: set permissions
+      file: path=/var/local/{{ projectname }} owner=www-data state=directory
+      tags:
+        - config-changed
+
+    - name: configure apache
+      template: src=templates/apache-trac.conf.in dest=/etc/apache2/sites-available/trac.conf owner=root group=root
+      tags:
+        - config-changed
+
+    - name: enable trac config
+      file: src=/etc/apache2/sites-available/trac.conf dest=/etc/apache2/sites-enabled/trac.conf state=link
+      tags:
+        - config-changed
+
+    - name: enable mod python
+      command: a2enmod python
+      tags:
+        - install
+
+    - name: start apache service 
+      service: name=apache2 state=started
+      tags:
+        - start
+
+    - name: start apache service 
+      service: name=apache2 state=stopped
+      tags:
+        - stop
+
+    - name: configure database relation
+      ini_file: dest=/var/local/{{ projectname }}/conf/trac.ini section=trac option=database value='mysql://{{ database__user }}:{{ database__password }}@{{ database__private_address }}:3306/{{ database__database }}'
+      tags:
+        - db-relation-changed
+      notify:
+        - restart apache
+
+  handlers:
+    - name: restart apache
+      service: name=apache2 state=restarted

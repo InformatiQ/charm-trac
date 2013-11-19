@@ -7,4 +7,8 @@ options:
     type: string
     default: "tracAdmin"
     description: "The Admin user password for trac"
+  projectname:
+    type: string
+    default: "trac"
+    description: "The trac project name"
 
