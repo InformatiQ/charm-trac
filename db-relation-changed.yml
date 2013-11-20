@@ -1,0 +1,6 @@
+- name: configure database relation
+  ini_file: dest=/var/local/{{ projectname }}/conf/trac.ini section=trac option=database value='mysql://{{ database__user }}:{{ database__password }}@{{ database__private_address }}:3306/{{ database__database }}'
+  tags:
+    - db-relation-changed
+  notify:
+    - restart apache

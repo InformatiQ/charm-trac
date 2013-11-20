@@ -8,7 +8,7 @@ import charmhelpers.contrib.ansible
 # tagged with the hook name.
 hooks = charmhelpers.contrib.ansible.AnsibleHooks(
     playbook_path='playbooks/sites.yml',
-    default_hooks=[])
+    default_hooks=['start', 'stop', 'config-changed', 'database-relation-changed'])
 
 @hooks.hook()
 def install():

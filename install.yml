@@ -1,0 +1,9 @@
+- name: install needed packages
+  apt: pkg={{ item }} state=latest update_cache=yes
+  with_items:
+    - trac
+    - libapache2-mod-python
+    - python-passlib
+
+- name: create trac dir
+  file: path=/var/local/{{ projectname }} owner=www-data group=www-data mode=0644 state=directory
