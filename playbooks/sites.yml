@@ -1,4 +1,6 @@
 - hosts: all
+  vars:
+    trac_path: /srv/trac/{{ projectname }}
   tasks:
     - include: install.yml
       tags:

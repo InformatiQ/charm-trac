@@ -1,11 +1,11 @@
 - name: create admin user
-  htpasswd: path=/var/local/{{ projectname }}/.htpasswd name={{ tracadmin_user }} password={{ tracadmin_pass }} owner=root group=www-data mode=0640
+  htpasswd: path={{ trac_path }}.htpasswd name={{ tracadmin_user }} password={{ tracadmin_pass }} owner=root group=www-data mode=0640
 
 - name: set admin permissions
-  command: trac-admin /var/local/{{ projectname }} permission add {{ tracadmin_user }} TRAC_ADMIN
+  command: trac-admin {{ trac_path }} permission add {{ tracadmin_user }} TRAC_ADMIN
 
 - name: set permissions
-  file: path=/var/local/{{ projectname }} owner=www-data state=directory
+  file: path={{ trac_path }} owner=www-data state=directory
 
 - name: configure apache
   template: src=templates/apache-trac.conf.in dest=/etc/apache2/sites-available/trac.conf owner=root group=root
@@ -17,5 +17,5 @@
   command: a2enmod python
 
 - name: init trac env
-  command: trac-admin /var/local/{{ projectname }} initenv {{projectname}} mysql://{{ database__user }}:{{ database__password }}@{{ database__private_address }}:3306/{{ database__database }} creates=/var/local/{{ projectname }}/conf/trac.ini
+  command: trac-admin {{ trac_path }} initenv {{projectname}} mysql://{{ database__user }}:{{ database__password }}@{{ database__private_address }}:3306/{{ database__database }} creates={{ trac_path }}/conf/trac.ini
 
