@@ -1,8 +1,13 @@
 - name: create admin user
   htpasswd: path={{ trac_path }}.htpasswd name={{ tracadmin_user }} password={{ tracadmin_pass }} owner=root group=www-data mode=0640
 
+- name: init sqlite trac env
+  command: trac-admin {{ trac_path }} initenv {{projectname}} sqlite:db/trac.db creates={{ trac_path }}/conf/trac.ini
+  when: db_backend == "sqlite"
+
 - name: set admin permissions
   command: trac-admin {{ trac_path }} permission add {{ tracadmin_user }} TRAC_ADMIN
+  when: db_backend == "sqlite"
 
 - name: set permissions
   file: path={{ trac_path }} owner=www-data state=directory
@@ -13,9 +18,10 @@
 - name: enable trac config
   file: src=/etc/apache2/sites-available/trac.conf dest=/etc/apache2/sites-enabled/trac.conf state=link
 
+- name: remove 000-default
+  file: src=/etc/apache2/sites-enabled/000-default state=absent
+
 - name: enable mod python
   command: a2enmod python
-
-- name: init trac env
-  command: trac-admin {{ trac_path }} initenv {{projectname}} mysql://{{ database__user }}:{{ database__password }}@{{ database__private_address }}:3306/{{ database__database }} creates={{ trac_path }}/conf/trac.ini
+  notify: restart apache
 

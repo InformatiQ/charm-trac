@@ -1,22 +1,23 @@
 - hosts: all
   vars:
-    trac_path: /srv/trac/{{ projectname }}
+    trac_basedir: /srv/trac
+    trac_path: "{{ trac_basedir }}/{{ projectname }}"
   tasks:
     - include: install.yml
       tags:
         - install
     - include: config-changed.yml
       tags:
-          -config-changed
-    - include: db-relation-changed.yml
+        - config-changed
+    - include: database-relation-changed.yml
       tags:
-        - db-relation-changed
+        - database-relation-changed
     - include: start.yml
       tags:
         - start
     - include: stop.yml
       tags:
         - stop
- handlers:
+  handlers:
     - name: restart apache
       service: name=apache2 state=restarted

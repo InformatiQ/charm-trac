@@ -11,4 +11,7 @@ options:
     type: string
     default: "trac"
     description: "The trac project name"
-
+  db_backend:
+    type: string
+    default: "mysql"
+    description: "Backend database engine, possible values are 'sqlite' or 'mysql'"

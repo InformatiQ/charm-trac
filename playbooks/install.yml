@@ -4,6 +4,14 @@
     - trac
     - libapache2-mod-python
     - python-passlib
+    - trac-xmlrpc
+    - trac-tags
+    - trac-mercurial
+    - trac-mastertickets
+    - trac-git
+    - trac-datefieldplugin
+    - trac-customfieldadmin
+    - trac-accountmanager
 
 - name: create trac dir
   file: path=/var/local/{{ projectname }} owner=www-data group=www-data mode=0644 state=directory

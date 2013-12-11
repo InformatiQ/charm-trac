@@ -3,11 +3,8 @@
            SetHandler mod_python
            PythonInterpreter main_interpreter
            PythonHandler trac.web.modpython_frontend
-           PythonOption TracEnv /var/local/trac
-           PythonOption TracEnvParentDir /var/local/trac
+           PythonOption TracEnv {{ trac_path }}
            PythonOption TracUriRoot /
-           PythonOption TracEnv /var/local/trac
-            # PythonOption TracEnvIndexTemplate /var/local/trac/templates/index-template.html
            PythonOption TracLocale en_US.UTF8
            PythonOption PYTHON_EGG_CACHE /tmp
            Order allow,deny
@@ -16,7 +13,7 @@
         <Location /login>
           AuthType Basic
           AuthName "myproject"
-          AuthUserFile /var/local/trac/.htpasswd
+          AuthUserFile {{ trac_path }}/../trac.htpasswd
           Require valid-user
         </Location>
 </VirtualHost>

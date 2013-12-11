@@ -12,3 +12,4 @@ provides:
 requires:
   database:
     interface: mysql
+    optional: true

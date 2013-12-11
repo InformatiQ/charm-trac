@@ -1,0 +1,15 @@
+- name: archive sqlite
+  command: mv {{ trac_path }} {{ trac_path }}.sqlite removes={{ trac_path }}
+
+- name: init mysql trac env
+  command: trac-admin {{ trac_path }} initenv {{projectname}} mysql://{{ database__user }}:{{ database__password }}@{{ database__private_address }}:3306/{{ database__database }} creates={{ trac_path }}/conf/trac.ini
+  notify:
+    - restart apache
+
+- name: set permissions
+  file: path={{ trac_path }} owner=www-data state=directory
+
+- name: configure database relation
+  ini_file: dest={{ trac_path }}/conf/trac.ini section=trac option=database value='mysql://{{ database__user }}:{{ database__password }}@{{ database__private_address }}:3306/{{ database__database }}'
+  notify:
+    - restart apache
